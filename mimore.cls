@@ -2,11 +2,11 @@
 \ProvidesClass{mimore}[2017/05/01 Minimal modern report class]
 
 \LoadClass[paper=a4,
-           twoside,
+           oneside,
            pagesize,
            11pt,
-           DIV=10,
-           BCOR=10mm,
+           DIV=11,
+           BCOR=0mm,
            cleardoublepage=empty,
            numbers=noenddot,
            titlepage,
@@ -155,16 +155,49 @@
   \small
 }
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mathematics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+\RequirePackage{dsfont}
+
+% Fix the spacing of \left and \right. Use these with the proper bracket
+% in order to ensure that they scale automatically.
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+
+\DeclareMathOperator*{\argmin}          {arg\,min}
+\DeclareMathOperator {\dist}            {dist}
+\DeclareMathOperator {\im}              {im}
+
+% Proper differential operators
+\renewcommand{\d}[1]{\ensuremath{\operatorname{d}\!{#1}}}
+
+% A nice way to typeset proper ordinal superscripts
+\newcommand  {\rd}{\textsuperscript{\textup{rd}}\xspace}
+\newcommand  {\nd}{\textsuperscript{\textup{nd}}\xspace}
+\renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fonts & colours
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage[charter]{mathdesign}
+% charter
+% \RequirePackage[charter]{mathdesign}
+% libertine
+% \RequirePackage{libertine}
+% \RequirePackage[libertine]{newtxmath}
+% lmodern
+\RequirePackage{lmodern}
 \RequirePackage[oldstyle,scale=0.7]{sourcecodepro}
 
 \usepackage{xcolor}
 
-\definecolor{hd-red}  {RGB}{197, 13, 41}
+\definecolor{hd-green}  {RGB}{0, 255, 86}
 \definecolor{hd-brown}{RGB}{ 90, 15, 20}
 \definecolor{hd-beige}{RGB}{245,240,234}
 
@@ -254,9 +287,9 @@
 
 \RequirePackage[%
   colorlinks = true,
-  citecolor  = hd-red,
-  linkcolor  = hd-red,
-  urlcolor   = hd-red,
+  citecolor  = hd-green,
+  linkcolor  = hd-green,
+  urlcolor   = hd-green,
   ]{hyperref}
 
 \RequirePackage{bookmark}
@@ -277,33 +310,6 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Mathematics
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\RequirePackage{amsmath}
-\RequirePackage{amsthm}
-\RequirePackage{dsfont}
-
-% Fix the spacing of \left and \right. Use these with the proper bracket
-% in order to ensure that they scale automatically.
-\let\originalleft\left
-\let\originalright\right
-\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
-\renewcommand{\right}{\aftergroup\egroup\originalright}
-
-\DeclareMathOperator*{\argmin}          {arg\,min}
-\DeclareMathOperator {\dist}            {dist}
-\DeclareMathOperator {\im}              {im}
-
-% Proper differential operators
-\renewcommand{\d}[1]{\ensuremath{\operatorname{d}\!{#1}}}
-
-% A nice way to typeset proper ordinal superscripts
-\newcommand  {\rd}{\textsuperscript{\textup{rd}}\xspace}
-\newcommand  {\nd}{\textsuperscript{\textup{nd}}\xspace}
-\renewcommand{\th}{\textsuperscript{\textup{th}}\xspace}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Penalties
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -314,30 +320,104 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Title setup
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
 
-\titlehead{%
-  \begin{tabular}{ll}
-    Name:           & \sAuthor\\
-    Course:         & \sCourse\\
-    Student number: & \sNumber\\
-    Date:           & \sDate\\
-  \end{tabular}
+\makeatletter % Allows use of commands with @ in their name
+% \let\sSubject\@subject
+% \let\sSubtitle\@subtitle
+\newcommand{\sUniversity}{Technische Universität Nürnberg}
+\newcommand{\sSubToMail}{nil}
+
+\renewcommand{\maketitle}{%
+    \begin{titlepage}\thispagestyle{empty}
+    \centering
+    \includegraphics[width=0.7\textwidth]{~/Library/texmf/tex/latex/mimore/Logo_UTN.jpg}
+    \begin{center}    \textsc{\Large   \sClass }\\[2.0 cm]
+    \end{center}% University Name
+
+    %Lab Report
+    \rule{\linewidth}{0.2 mm} \\[0.4 cm]
+    { \huge \bfseries \@title}\\
+    \rule{\linewidth}{0.2 mm} \\[0.5 cm]
+    \textsc{\Large \@subtitle }\\[1.5 cm] % Course 
+    \ifdefined\sSubTo
+        \begin{minipage}{0.4\textwidth}
+        \begin{flushleft} \large
+        \emph{Submitted To:}\\
+        \sSubTo\\ \small
+        \sUniversity\\
+        \sSubToMail\\
+        \hfill
+        \end{flushleft}
+        \end{minipage}~
+        \begin{minipage}{0.4\textwidth}
+        \begin{flushright} \large
+        \emph{Submitted By :} \\
+        \@author \\ \small
+        \sUniversity\\
+        \href{mailto:macallyster.edmondson@utn.de}{macallyster.edmondson@utn.de}\\
+        \href{http://github.com/mac-edmondson}{github.com/mac-edmondson}\\
+        \end{flushright}
+        \end{minipage}\\[2 cm]
+    \else
+        \centering 
+        \@author \\ \small
+        \sUniversity\\
+        \href{mailto:macallyster.edmondson@utn.de}{macallyster.edmondson@utn.de}\\
+        \href{http://github.com/mac-edmondson}{github.com/mac-edmondson}\\
+    \fi
+    \vfill
+    {\large\@date\par}
+    \end{titlepage}
 }
-\subject  {\sSubject}
-\author   {\sAuthor}
-\title    {\sTitle}
-\subtitle {\sSubtitle}
-\date     {}
+\makeatother % Restores normal command handling
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Headers
+% Table of Contents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\let\oldeverythingtableofcontents\tableofcontents
+\renewcommand\tableofcontents{%
+  \oldeverythingtableofcontents\thispagestyle{empty} 
+  
+  % Now add the structural commands
+  \clearpage
+  % If you want the page numbering to start after the table of contents,
+  % uncomment this.
+  % \setcounter{page}{1}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Headers / Footers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage{scrlayer-scrpage}
 \pagestyle{scrheadings}
+\setkomafont{pagehead}{\small}
+\makeatletter
+\lohead{\@author}
+\lehead{\@author}
+\rohead{\@title}
+\rehead{\@title}
+\chead{\sClass}
+\ofoot{}
+\ifoot{}
+\cfoot{}
+\lefoot{\@date}
+\lofoot{\@date}
+\refoot{\text{Page: \pagemark}}
+\rofoot{\text{Page: \pagemark}}
+\makeatother
 
-\lohead{\sAuthor}
-\rohead{\sTitle}
+% Make a solid green bar at the bottom of the page
+
+\DeclareNewLayer[
+      background,
+      align=pagetop,  
+      voffset=\dimexpr\paperheight-0.3cm\relax,
+      hoffset=0pt,
+      width=\paperwidth,
+      height=0.3cm,      
+      contents={\color{hd-green}\rule{\layerwidth}{\layerheight}}
+]{bottom.bar}
+\AddLayersToPageStyle{scrheadings}{bottom.bar}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Typefaces for sections
