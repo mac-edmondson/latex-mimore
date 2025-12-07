@@ -331,7 +331,7 @@
 \renewcommand{\maketitle}{%
     \begin{titlepage}\thispagestyle{empty}
     \centering
-    \includegraphics[width=0.7\textwidth]{~/Library/texmf/tex/latex/mimore/Logo_UTN.jpg}
+    \includegraphics[width=0.7\textwidth]{Logo_UTN.jpg}
     \begin{center}    \textsc{\Large   \sClass }\\[2.0 cm]
     \end{center}% University Name
 
